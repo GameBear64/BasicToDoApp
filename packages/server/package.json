@@ -1,0 +1,23 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon",
+    "migrations": "npx knex migrate:latest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.0",
+    "express-async-errors": "^3.1.1",
+    "joi": "^17.13.3",
+    "knex": "^3.1.0",
+    "nodemon": "^3.1.4",
+    "react-hook-form": "^7.53.0",
+    "sqlite3": "^5.1.7"
+  }
+}

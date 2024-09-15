@@ -1,0 +1,22 @@
+{
+  "name": "todo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently -n BE,FE -c yellow,blue \"npm run BE\" \"npm run FE\"",
+    "setup": "npm i && npm run migrations -w packages/server",
+    "BE": "npm run dev -w packages/server",
+    "FE": "npm run dev -w packages/client"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "workspaces": [
+    "packages/server",
+    "packages/client"
+  ],
+  "devDependencies": {
+    "concurrently": "^9.0.1"
+  }
+}

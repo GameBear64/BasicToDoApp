@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@tools": ["src/components/toolbox/*"],
+      "@components": ["src/components/*"],
+      "@views": ["src/views/*"],
+    }
+  }
+}

@@ -1,0 +1,71 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: black;
+  margin: 0;
+  padding: 0;
+}
+
+*::-webkit-scrollbar { 
+  display: none;
+}
+
+@layer base {
+  button:not(.bare) {
+    @apply rounded-md border border-transparent bg-green-500 md:px-2 md:py-1 p-1 md:text-lg font-semibold text-white hover:bg-green-600 focus:outline-none active:translate-y-0.5 transition-transform
+  }
+
+  textarea, input {
+    @apply rounded bg-base-m text-txtPrimary h-10 px-2 w-full border border-base-s focus:border-green-500 focus:outline-none my-2;
+  }
+
+  textarea {
+    @apply h-20
+  }
+}
+
+@layer components {
+  .reject-btn {
+    @apply bg-red-600 hover:bg-red-700;
+  }
+
+  .accept-btn {
+    @apply bg-green-600 hover:bg-green-700;
+  }
+
+  .info-btn {
+    @apply bg-cyan-600 hover:bg-cyan-700;
+  }
+
+  .plain-btn {
+    @apply !bg-base-m hover:!bg-base-s;
+  }
+
+  .input-error {
+    @apply border-2 border-red-600 focus:border-red-800
+  }
+}
+
+
+.theme-light {
+  --base-x: theme('colors.white');
+  --base: theme('colors.neutral.50');
+  --base-m: theme('colors.neutral.200');
+  --base-s: theme('colors.neutral.300');
+  --base-xs: theme('colors.neutral.400');
+  --txtPrimary: theme('colors.neutral.800');
+  --txtSecondary: theme('colors.neutral.600');
+}
+
+.theme-dark {
+  --base-x: theme('colors.neutral.800');
+  --base: theme('colors.neutral.900');
+  --base-m: theme('colors.neutral.700');
+  --base-s: theme('colors.neutral.600');
+  --base-xs: theme('colors.neutral.500');
+  --txtPrimary: theme('colors.white');
+  --txtSecondary: theme('colors.neutral.300');
+}
