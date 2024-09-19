@@ -11,6 +11,10 @@ export default {
         'base-xs': 'var(--base-xs)', //for borders
         txtPrimary: 'var(--txtPrimary)',
         txtSecondary: 'var(--txtSecondary)',
+        'primary-light': 'var(--primary-light)',
+        primary: 'var(--primary)',
+        'primary-shade': 'var(--primary-shade)',
+        'primary-dark': 'var(--primary-dark)',
       },
       fontSize: {
         // because we override base with a color

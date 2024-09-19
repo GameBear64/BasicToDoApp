@@ -2,13 +2,13 @@ const router = require('express').Router();
 
 const joi = require('joi');
 
-const { joiValidate } = require('../toolkit/utils');
+const { joiValidate } = require('../middleware/validation');
 const db = require('../data/db-config');
 
 router
   .route('/all')
   .get(async (_req, res) => {
-    const result = await db('todo');
+    const result = await db('todos');
 
     res.status(200).json(result);
   })
@@ -24,10 +24,9 @@ router
       description: joi.string().min(3).optional().allow(null, ''),
     }),
     async (req, res) => {
-      const result = await db('todo')
-        .returning('*')
-        .insert(req.body)
-        .then(data => data[0]);
+      const [result] = await db('todos')
+        .insert({ ...req.body, author: req.authUser.id })
+        .returning('*');
 
       res.status(201).json(result);
     }
@@ -39,7 +38,7 @@ router
 router
   .route('/:id')
   .get(async (req, res) => {
-    const result = await db('todo').where('id', Number(req.params.id));
+    const result = await db('todos').where('id', req.params.id);
 
     res.status(200).json(result);
   })
@@ -50,17 +49,13 @@ router
       completed: joi.boolean().optional(),
     }),
     async (req, res) => {
-      const result = await db('todo')
-        .where('id', Number(req.params.id))
-        .update({ ...req.body, updated_at: db.fn.now() })
-        .returning('*')
-        .then(data => data[0]);
+      const [result] = await db('todos').where('id', req.params.id).update(req.body).returning('*');
 
       res.status(200).json(result);
     }
   )
   .delete(async (req, res) => {
-    await db('todo').where('id', Number(req.params.id)).del();
+    await db('todos').where('id', req.params.id).del();
 
     res.status(200).json();
   })

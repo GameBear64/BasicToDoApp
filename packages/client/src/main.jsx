@@ -1,10 +1,11 @@
 import { createRoot } from 'react-dom/client';
-import App from './App.jsx';
-import ThemeProvider from './toolbox/ThemeProvider.jsx';
+
 import './index.css';
+import ThemeProvider from '@tools/ThemeProvider.jsx';
+import Router from './routers/Router';
 
 createRoot(document.getElementById('root')).render(
   <ThemeProvider>
-    <App />
+    <Router />
   </ThemeProvider>
 );

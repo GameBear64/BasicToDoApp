@@ -10,6 +10,8 @@ export default defineConfig({
       '@tools': fileURLToPath(new URL('./src/toolbox', import.meta.url)),
       '@components': fileURLToPath(new URL('./src/components', import.meta.url)),
       '@views': fileURLToPath(new URL('./src/views', import.meta.url)),
+      '@form': fileURLToPath(new URL('./src/components/Form', import.meta.url)),
+      '@store': fileURLToPath(new URL('./src/stores', import.meta.url)),
     },
   },
   server: {

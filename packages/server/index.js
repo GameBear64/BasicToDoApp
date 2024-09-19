@@ -1,14 +1,32 @@
+//====== Environment =======
+require('dotenv').config({ path: '../../.env' });
+
+//======= Database =======
+const db = require('./data/db-config');
+db.migrate.latest().then(([_core, migrations]) => {
+  if (migrations.length > 0) {
+    console.log(`Knex: running ${migrations.length} migrations:`);
+
+    migrations.forEach(migration => {
+      console.log(`- ${migration}`);
+    });
+  }
+});
+
+//======= Routing =======
 const express = require('express');
 const app = express();
 const cors = require('cors');
+const { getCookies } = require('./middleware/general');
 
 require('express-async-errors');
 app.use(cors());
 app.use(express.json());
+app.use(getCookies);
 
 require('./routes/router')(app);
 
-//========= Error Handlers ==========
+//======= Error Handlers =======
 app.use((_req, res) => res.status(404).json('Route not found.'));
 
 app.use((error, _req, res, _next) => {
@@ -16,7 +34,7 @@ app.use((error, _req, res, _next) => {
   res.status(error.status || 500).json(error.message);
 });
 
-//===== Listen on port #### =====
+//======= Listen on port #### =======
 app.listen(3000, () => {
   console.log(`Listening on http://localhost:3000/`);
 });

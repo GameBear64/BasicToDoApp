@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 
 import useFetch from '@tools/useFetch';
 import { successSnackBar } from '@tools/snackbars';
-import { REQUIRED, MIN_LENGTH, MAX_LENGTH } from '@tools/validations';
+import { REQUIRED, MIN_LENGTH, MAX_LENGTH } from '@components/Form/validations';
 
 import { TasksContext } from '@views/TaskView';
 
