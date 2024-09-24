@@ -1,12 +1,7 @@
 const jwt = require('jsonwebtoken');
 const { wildcardMatch, pick } = require('../toolbox/utils');
+const { noAuthRoutes } = require('../toolbox/consts');
 const db = require('../data/db-config');
-
-let noAuthRoutes = [
-  { path: '/auth/*', methods: ['POST'] },
-  { path: '/recourse/*', methods: ['GET'] },
-  { path: '/favicon.ico', methods: ['GET'] },
-];
 
 exports.checkAuth = async (req, res, next) => {
   let isNoAuthRoute = noAuthRoutes.some(

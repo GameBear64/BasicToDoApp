@@ -6,7 +6,7 @@ exports.up = function (knex) {
   let uuidGenerationRaw = `(lower(hex(randomblob(4))) || '-' || lower(hex(randomblob(2))) || '-4' || substr(lower(hex(randomblob(2))),2) || '-' || substr('89ab',abs(random()) % 4 + 1, 1) || substr(lower(hex(randomblob(2))),2) || '-' || lower(hex(randomblob(6))))`;
 
   return knex.schema
-    .createTable('todos', table => {
+    .createTable('tasks', table => {
       table.uuid('id').defaultTo(knex.raw(uuidGenerationRaw));
       table.uuid('author').notNullable().references('id').inTable('users').onDelete('CASCADE');
       table.string('title').notNullable();
@@ -16,11 +16,11 @@ exports.up = function (knex) {
     })
     .then(() => {
       return knex.raw(`
-        CREATE TRIGGER update_todos_timestamp
-        BEFORE UPDATE ON todos
+        CREATE TRIGGER update_tasks_timestamp
+        BEFORE UPDATE ON tasks
         FOR EACH ROW
         BEGIN
-          UPDATE todos
+          UPDATE tasks
           SET updated_at = CURRENT_TIMESTAMP
           WHERE id = OLD.id;
         END;
@@ -33,7 +33,7 @@ exports.up = function (knex) {
  * @returns { Promise<void> }
  */
 exports.down = function (knex) {
-  return knex.schema.dropTableIfExists('todos').then(() => {
-    return knex.raw(`DROP TRIGGER IF EXISTS update_todos_timestamp;`);
+  return knex.schema.dropTableIfExists('tasks').then(() => {
+    return knex.raw(`DROP TRIGGER IF EXISTS update_task_timestamp;`);
   });
 };

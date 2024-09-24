@@ -1,17 +1,13 @@
-import { useContext, useState } from 'react';
+// import { useContext, useState } from 'react';
 
 import { formatDate } from '@tools/utils';
 
 import Icon from '@components/Icon';
-import Modal from '@components/Modal';
-import TaskDetails from '@components/Task/TaskDetails';
-
-import { TasksContext } from '@views/TaskView';
+// import Modal from '@components/Modal';
+// import TaskDetails from '@components/Task/TaskDetails';
 
 export default function TaskCard({ task }) {
-  const [optionsModal, setOptionsModal] = useState(false);
-
-  const { checkTask } = useContext(TasksContext);
+  // const [optionsModal, setOptionsModal] = useState(false);
 
   return (
     <>
@@ -21,9 +17,9 @@ export default function TaskCard({ task }) {
             clickable
             styles={`${task.completed ? 'text-green-500' : 'text-txtSecondary'} pointer-events-auto`}
             icon={task.completed ? 'check_box' : 'check_box_outline_blank'}
-            onClick={() => checkTask(task)}
+            // onClick={() => checkTask(task)}
           />
-          <p className="cursor-pointer pointer-events-auto line-clamp-2" onClick={() => setOptionsModal(true)}>
+          <p className="cursor-pointer pointer-events-auto line-clamp-2" /*onClick={() => setOptionsModal(true)}*/>
             {task.title}
           </p>
         </div>
@@ -31,11 +27,11 @@ export default function TaskCard({ task }) {
 
         <p className="text-xs text-txtSecondary text-end">{formatDate(task.created_at)}</p>
       </div>
-      {optionsModal && (
+      {/* {optionsModal && (
         <Modal easyClose title="Task details" closeFunction={() => setOptionsModal(false)}>
           <TaskDetails task={task} />
         </Modal>
-      )}
+      )} */}
     </>
   );
 }

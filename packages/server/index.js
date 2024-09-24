@@ -10,6 +10,8 @@ db.migrate.latest().then(([_core, migrations]) => {
     migrations.forEach(migration => {
       console.log(`- ${migration}`);
     });
+
+    db.seed.run();
   }
 });
 
@@ -24,7 +26,7 @@ app.use(cors());
 app.use(express.json());
 app.use(getCookies);
 
-require('./routes/router')(app);
+require('./routes/_router')(app);
 
 //======= Error Handlers =======
 app.use((_req, res) => res.status(404).json('Route not found.'));

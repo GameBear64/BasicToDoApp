@@ -6,7 +6,9 @@ import { setUser } from '@store/user';
 
 import Layout from '@components/Layout/Layout';
 
-const TaskView = lazy(() => import('../views/TaskView'));
+// const TaskView = lazy(() => import('../views/TaskView'));
+const Home = lazy(() => import('../views/Home'));
+const Workspace = lazy(() => import('../views/Workspace'));
 const Login = lazy(() => import('../views/Login'));
 const Register = lazy(() => import('../views/Register'));
 
@@ -35,7 +37,16 @@ export default function Router() {
               path: '/',
               element: (
                 <Suspense fallback={<Loader />}>
-                  <TaskView />
+                  <Home />
+                </Suspense>
+              ),
+              errorElement: <ErrorPage />,
+            },
+            {
+              path: '/wp/:id/:view?',
+              element: (
+                <Suspense fallback={<Loader />}>
+                  <Workspace />
                 </Suspense>
               ),
               errorElement: <ErrorPage />,
@@ -58,9 +69,9 @@ export default function Router() {
             </Suspense>
           ),
         },
+        { path: '*', element: <NotFound /> },
       ],
     },
-    { path: '*', element: <NotFound /> },
   ]);
 
   return <RouterProvider router={router} />;

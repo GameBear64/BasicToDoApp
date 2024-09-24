@@ -9,6 +9,7 @@ import { successSnackBar } from '@tools/snackbars';
 
 export default function Login() {
   const navigate = useNavigate();
+
   const handleLogin = data => {
     useFetch({ url: 'auth/login', method: 'POST', body: data, requireAuth: false }).then(() => {
       successSnackBar('Welcome back!');

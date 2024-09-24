@@ -15,6 +15,7 @@ exports.up = function (knex) {
       // ==============
       table.string('theme').defaultTo('dark');
       table.string('accent').defaultTo('green');
+      table.string('force_accent').defaultTo(false);
       table.timestamp('password_changed_at').nullable();
       table.timestamps(true, true);
     })
