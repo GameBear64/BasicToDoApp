@@ -1,24 +1,22 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { useStore } from '@nanostores/react';
 import { Link, useParams } from 'react-router-dom';
 
-import useFetch from '@tools/useFetch';
+import { $workspace, fetchWP } from '@store/workspace';
 
 import WorkArea from '@components/Workspace/WorkArea';
 
 export default function Home() {
   const { id, view } = useParams();
-
-  const [workspace, setWorkspace] = useState([]);
-
-  const fetchWP = () => {
-    useFetch({
-      url: `workspace/${id}${view ? '/' + view : ''}`,
-    }).then(response => setWorkspace(response));
-  };
+  const workspace = useStore($workspace);
 
   useEffect(() => {
-    fetchWP();
+    fetchWP({ id, view });
   }, [id, view]);
+
+  useEffect(() => {
+    console.log(workspace);
+  }, [workspace]);
 
   return (
     <>

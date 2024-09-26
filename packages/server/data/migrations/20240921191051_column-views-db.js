@@ -22,6 +22,7 @@ exports.up = function (knex) {
     })
     .table('tasks', table => {
       table.uuid('column_id').notNullable().references('id').inTable('columns').onDelete('CASCADE');
+      table.integer('position').notNullable();
     });
 };
 

@@ -15,6 +15,7 @@ const snackDefaultSettings = (color, { double, animated } = {}) => ({
   style: {
     container: [
       ['border-left', `5px solid ${color}`],
+      ['padding', '10px 20px 10px 10px'],
       double ? ['border-right', `5px solid ${color}`] : [],
       animated ? ['animation', 'pulse 2s infinite'] : [],
     ],

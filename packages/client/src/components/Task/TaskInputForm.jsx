@@ -1,15 +1,10 @@
-import { useContext } from 'react';
 import { useForm } from 'react-hook-form';
 
-import useFetch from '@tools/useFetch';
-import { successSnackBar } from '@tools/snackbars';
+import { addTask, updateTask } from '@store/workspace';
+
 import { REQUIRED, MIN_LENGTH, MAX_LENGTH } from '@components/Form/validations';
 
-import { TasksContext } from '@views/TaskView';
-
 export default function TaskInputForm({ initialValues, closeFunction }) {
-  const { setTasks } = useContext(TasksContext);
-
   const {
     register,
     handleSubmit,
@@ -17,27 +12,15 @@ export default function TaskInputForm({ initialValues, closeFunction }) {
   } = useForm({ defaultValues: initialValues });
 
   const sendData = data => {
-    if (initialValues) {
-      useFetch({
-        url: `task/${initialValues.id}`,
-        method: 'PATCH',
-        body: { title: data.title, description: data.description },
-      }).then(response => {
-        successSnackBar('Task updated');
-        setTasks(prev => prev.map(task => (task.id === response.id ? response : task)));
-        closeFunction && closeFunction();
-      });
+    if (initialValues.id) {
+      updateTask(initialValues.id, { title: data.title, description: data.description });
     } else {
-      useFetch({
-        url: 'task',
-        method: 'POST',
-        body: data,
-      }).then(response => {
-        successSnackBar('Task created');
-        setTasks(prev => [...prev, response]);
-        closeFunction && closeFunction();
+      addTask({
+        ...data,
+        column_id: initialValues.column_id,
       });
     }
+    closeFunction && closeFunction();
   };
 
   return (

@@ -1,32 +1,12 @@
-// import { useState } from 'react';
-
-// import Modal from '@components/Modal';
-import useFetch from '@tools/useFetch';
-import { formatDate } from '@tools/utils';
-
-// import TaskInputForm from '@components/Task/TaskInputForm';
-// import TaskCard from '@components/Task/TaskCard';
-import Icon from '@components/Icon';
+import { useState } from 'react';
 import { Droppable, Draggable } from '@hello-pangea/dnd';
 
-export default function Column(column) {
-  // const [createTaskModal, setCreateTaskModal] = useState(false);
+import Modal from '@components/Modal';
+import TaskCard from '@components/Task/TaskCard';
+import TaskInputForm from '@components/Task/TaskInputForm';
 
-  const sendData = () => {
-    useFetch({
-      url: 'task',
-      method: 'POST',
-      body: {
-        title: 'Dummy test task',
-        description: ':) !',
-        column_id: column.id,
-      },
-    }).then(() => {
-      // successSnackBar('Task created');
-      // setTasks(prev => [...prev, response]);
-      // closeFunction && closeFunction();
-    });
-  };
+export default function Column(column) {
+  const [editMode, setEditMode] = useState(false);
 
   return (
     <>
@@ -35,26 +15,12 @@ export default function Column(column) {
 
         <Droppable droppableId={column.id}>
           {provided => (
-            <div {...provided.droppableProps} ref={provided.innerRef}>
+            <div className="w-full flex flex-col gap-2 my-2" {...provided.droppableProps} ref={provided.innerRef}>
               {column?.tasks?.map((task, i) => (
                 <Draggable draggableId={task.id} index={i} key={task.id}>
-                  {provided => (
+                  {(provided, snapshot) => (
                     <div {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef}>
-                      <div className="bg-base-m rounded mb-2 p-2 hover:bg-base-s pointer-events-none">
-                        <div className="flex gap-2">
-                          <Icon
-                            clickable
-                            styles={`${task.completed ? 'text-green-500' : 'text-txtSecondary'} pointer-events-auto`}
-                            icon={task.completed ? 'check_box' : 'check_box_outline_blank'}
-                          />
-                          <p className="cursor-pointer pointer-events-auto line-clamp-2">{task.title}</p>
-                        </div>
-                        {task.description && (
-                          <p className="my-2 text-sm text-txtSecondary line-clamp-6">{task.description}</p>
-                        )}
-
-                        <p className="text-xs text-txtSecondary text-end">{formatDate(task.created_at)}</p>
-                      </div>
+                      <TaskCard task={task} isDragging={snapshot.isDragging} />
                     </div>
                   )}
                 </Draggable>
@@ -64,14 +30,14 @@ export default function Column(column) {
           )}
         </Droppable>
         <div className="flex-1 rounded-lg">
-          <button onClick={sendData}>Add</button>
+          <button onClick={() => setEditMode(true)}>Add</button>
         </div>
       </div>
-      {/* {createTaskModal && (
-        <Modal easyClose title="Create new task" closeFunction={() => setCreateTaskModal(false)}>
-          <TaskInputForm closeFunction={() => setCreateTaskModal(false)} />
+      {editMode && (
+        <Modal easyClose title="Edit details" closeFunction={() => setEditMode(false)}>
+          <TaskInputForm initialValues={{ column_id: column.id }} closeFunction={() => setEditMode(false)} />
         </Modal>
-      )} */}
+      )}
     </>
   );
 }
