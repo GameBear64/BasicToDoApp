@@ -1,14 +1,19 @@
 import { useState } from 'react';
+import { useStore } from '@nanostores/react';
 
 import { formatDate } from '@tools/utils';
-import { advanceTask } from '@store/workspace';
+import { getCheckboxStyles } from '@tools/helpers';
+import { $workspace, advanceTask } from '@store/workspace';
 
 import Icon from '@components/Icon';
 import Modal from '@components/Modal';
 import TaskDetails from '@components/Task/TaskDetails';
 
 export default function TaskCard({ task, isDragging }) {
+  const workspace = useStore($workspace);
   const [optionsModal, setOptionsModal] = useState(false);
+
+  const checkboxStyles = getCheckboxStyles(task.id, workspace.columns);
 
   return (
     <>
@@ -16,8 +21,8 @@ export default function TaskCard({ task, isDragging }) {
         <div className="flex gap-2">
           <Icon
             clickable
-            styles={`${task.completed ? 'text-green-500' : 'text-txtSecondary'} pointer-events-auto`}
-            icon={task.completed ? 'check_box' : 'check_box_outline_blank'}
+            styles={`${checkboxStyles[0]} pointer-events-auto`}
+            icon={checkboxStyles[1]}
             onClick={() => !isDragging && advanceTask(task.id)}
           />
           <p

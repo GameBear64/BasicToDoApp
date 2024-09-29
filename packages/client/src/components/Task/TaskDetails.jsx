@@ -1,27 +1,26 @@
 import { useState } from 'react';
+import { useStore } from '@nanostores/react';
 
 import { formatDate } from '@tools/utils';
+import { getCheckboxStyles } from '@tools/helpers';
 
-import { removeTask, advanceTask } from '@store/workspace';
+import { $workspace, removeTask, advanceTask } from '@store/workspace';
 
 import Icon from '@components/Icon';
 import Modal from '@components/Modal';
 import TaskInputForm from '@components/Task/TaskInputForm';
 
 export default function TaskDetails({ task }) {
+  const workspace = useStore($workspace);
   const [editMode, setEditMode] = useState(false);
+
+  const checkboxStyles = getCheckboxStyles(task.id, workspace.columns);
 
   return (
     <div>
       <div className="flex gap-2 justify-between">
         <div className="flex gap-2 items-center">
-          <Icon
-            clickable
-            styles={task.completed ? 'text-green-500' : 'text-txtSecondary'}
-            icon={task.completed ? 'check_box' : 'check_box_outline_blank'}
-            // dialogs
-            onClick={() => advanceTask(task.id)}
-          />
+          <Icon clickable styles={checkboxStyles[0]} icon={checkboxStyles[1]} onClick={() => advanceTask(task.id)} />
           <p className="text-xl font-semibold">{task.title}</p>
         </div>
         <div className="flex gap-2">

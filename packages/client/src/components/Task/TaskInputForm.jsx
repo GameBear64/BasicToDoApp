@@ -1,53 +1,58 @@
-import { useForm } from 'react-hook-form';
+import { useEffect, useState } from 'react';
+import { useStore } from '@nanostores/react';
 
-import { addTask, updateTask } from '@store/workspace';
+import Form from '@form/Form';
+import { Select, Input, Textarea } from '@form/Fields';
+import { REQUIRED, MIN_LENGTH, MAX_LENGTH } from '@form/validations';
 
-import { REQUIRED, MIN_LENGTH, MAX_LENGTH } from '@components/Form/validations';
+import { $workspace, addTask, updateTask, FEMoveTask } from '@store/workspace';
+import { pick } from '@tools/utils';
 
 export default function TaskInputForm({ initialValues, closeFunction }) {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({ defaultValues: initialValues });
+  const workspace = useStore($workspace);
+  const [columnsOption, setColumnsOption] = useState([]);
+
+  useEffect(() => {
+    setColumnsOption(
+      [].concat(...workspace.views.map(v => v.columns.map(c => ({ value: c.id, label: `${v.name} > ${c.name}` }))))
+    );
+  }, [workspace]);
 
   const sendData = data => {
     if (initialValues.id) {
-      updateTask(initialValues.id, { title: data.title, description: data.description });
+      updateTask(initialValues.id, pick(data, ['title', 'description', 'column_id']));
+      FEMoveTask(initialValues.id, { column_id: data.column_id, position: initialValues.position });
     } else {
-      addTask({
-        ...data,
-        column_id: initialValues.column_id,
-      });
+      addTask(data);
     }
     closeFunction && closeFunction();
   };
 
   return (
     <>
-      <form onSubmit={handleSubmit(data => sendData(data))}>
-        <input
+      <Form defaultValues={initialValues} onSubmit={sendData}>
+        <Select name="column_id" placeholder="Status" options={columnsOption} rules={REQUIRED} />
+
+        <Input
           placeholder="Title"
-          {...register('title', {
+          name="title"
+          rules={{
             ...REQUIRED,
             ...MIN_LENGTH(3),
             ...MAX_LENGTH(255),
-          })}
-          className={errors['title'] && 'input-error'}
+          }}
         />
-        {errors['title'] && <p className="font-semibold text-red-600">{errors['title'].message}</p>}
-        <textarea
+        <Textarea
           placeholder="Description"
-          {...register('description', {
+          name="description"
+          rules={{
             ...MIN_LENGTH(3),
-          })}
-          className={errors['description'] && 'input-error'}
+          }}
         />
-        {errors['description'] && <p className="font-semibold text-red-600">{errors['description'].message}</p>}
         <div className="flex justify-end">
           <button type="submit">Submit</button>
         </div>
-      </form>
+      </Form>
     </>
   );
 }

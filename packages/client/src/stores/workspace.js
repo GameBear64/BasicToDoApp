@@ -28,25 +28,42 @@ export function updateTask(taskID, body) {
 }
 
 export function advanceTask(taskID) {
-  useFetch({
-    url: `task/${taskID}/advance`,
-    method: 'PATCH',
-  }).then(response => {
-    if (typeof response == 'string') {
-      infoSnackBar(response);
-    } else {
-      $workspace.setKey('columns', response);
-    }
-  });
+  const updatedColumns = structuredClone($workspace.get().columns);
+
+  const currentColumn = updatedColumns.find(c => c.tasks.some(t => t.id == taskID));
+  const nextColumn = updatedColumns.find(c => c.position > currentColumn.position);
+
+  if (!nextColumn) return infoSnackBar('Already at the last column');
+
+  const position = nextColumn.tasks?.[0] ? nextColumn.tasks?.[0].position - 1 : 1;
+
+  moveTask(taskID, { column_id: nextColumn.id, position });
+  FEMoveTask(taskID, { column_id: nextColumn.id, position });
 }
 
-export function moveTask(taskID, { destination, position }) {
+export function FEMoveTask(taskID, { column_id, position }) {
+  const updatedColumns = structuredClone($workspace.get().columns);
+  const currentColumn = updatedColumns.find(c => c.tasks.some(t => t.id == taskID));
+  const nextColumn = updatedColumns.find(c => c.id == column_id);
+
+  let task = currentColumn.tasks.findIndex(t => t.id == taskID);
+  task = { ...task, column_id, position };
+
+  const [movedTask] = currentColumn.tasks.splice(task, 1);
+  if (nextColumn) {
+    nextColumn.tasks.splice(position, 0, movedTask);
+  }
+
+  $workspace.setKey(`columns`, updatedColumns);
+}
+
+export function moveTask(taskID, { column_id, position }) {
   return useFetch({
     url: `task/${taskID}/move`,
     method: 'PATCH',
     body: {
-      column_id: destination,
-      position: position,
+      column_id,
+      position,
     },
   });
 }

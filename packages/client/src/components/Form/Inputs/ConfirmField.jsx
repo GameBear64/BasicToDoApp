@@ -15,7 +15,7 @@ export default function ConfirmField({ name, sameAs, rules = {}, styles, label, 
                     if (watch(sameAs) != value) return 'Your passwords do no match';
                   },
                 })}
-                className={errors[name] ? 'input-error' : 'input'}
+                className={errors[name] && 'input-error'}
                 {...rest}
               />
             </div>

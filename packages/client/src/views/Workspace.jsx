@@ -14,10 +14,6 @@ export default function Home() {
     fetchWP({ id, view });
   }, [id, view]);
 
-  useEffect(() => {
-    console.log(workspace);
-  }, [workspace]);
-
   return (
     <>
       <div className="flex gap-2">

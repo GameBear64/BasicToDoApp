@@ -4,22 +4,9 @@ import ConfirmField from './Inputs/ConfirmField';
 import Input from './Inputs/Input';
 import IconPicker from './Inputs/IconPicker';
 import MediaSelect from './Inputs/MediaSelect';
-import MultiSelect from './Inputs/MultiSelect';
 import Select from './Inputs/SelectInput';
 import Textarea from './Inputs/Textarea';
 import Form from './Form';
 import SubmitButton from './SubmitButton';
 
-export {
-  CheckBox,
-  ColorPicker,
-  ConfirmField,
-  Input,
-  IconPicker,
-  MediaSelect,
-  MultiSelect,
-  Select,
-  Textarea,
-  Form,
-  SubmitButton,
-};
+export { CheckBox, ColorPicker, ConfirmField, Input, IconPicker, MediaSelect, Select, Textarea, Form, SubmitButton };

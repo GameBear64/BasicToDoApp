@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 
-import { ConfirmField, Input } from '@form/Fields';
 import Form from '@form/Form';
+import { ConfirmField, Input } from '@form/Fields';
 import { MAX_LENGTH, MIN_LENGTH, REQUIRED } from '@form/validations';
 
 import useFetch from '@tools/useFetch';

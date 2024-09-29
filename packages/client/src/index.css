@@ -18,7 +18,7 @@
     @apply rounded-md border border-transparent bg-primary md:px-2 md:py-1 p-1 md:text-lg font-semibold text-white hover:bg-primary-shade focus:outline-none active:translate-y-0.5 transition-transform
   }
 
-  textarea, input {
+  textarea, input, select {
     @apply rounded bg-base-m text-txtPrimary h-10 px-2 w-full border border-base-s focus:border-primary focus:outline-none my-2;
   }
 

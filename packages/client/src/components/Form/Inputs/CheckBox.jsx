@@ -12,11 +12,14 @@ export default function InputField({ name, label, rules = {}, styles, ...rest })
                 id={label?.toLowerCase().replace(/ /g, '-')}
                 ref={ref}
                 type="checkbox"
-                className={errors[name] ? 'input-error' : 'input size-5 accent-primary'}
+                className={errors[name] ? 'input-error' : 'size-5 accent-primary'}
                 {...registerRest}
                 {...rest}
               />
-              <label htmlFor={label?.toLowerCase().replace(/ /g, '-')} className="text-sm font-semibold text-txtSecondary">
+              <label
+                htmlFor={label?.toLowerCase().replace(/ /g, '-')}
+                className="text-sm font-semibold text-txtSecondary"
+              >
                 {label}
               </label>
             </div>

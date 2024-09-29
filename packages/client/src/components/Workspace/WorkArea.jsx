@@ -12,26 +12,20 @@ export default function WorkArea({ columns }) {
 
     if (!destination) return;
 
-    const currentColumns = $workspace.get().columns;
-    const updatedColumns = structuredClone(currentColumns);
+    const updatedColumns = structuredClone($workspace.get().columns);
     let movedTask;
     let destinationTasks;
 
     if (source.droppableId === destination.droppableId) {
       // Same column: reorder tasks
-      const column = updatedColumns.find(col => col.id === source.droppableId);
-      destinationTasks = column.tasks;
+      destinationTasks = updatedColumns.find(col => col.id === source.droppableId).tasks;
       [movedTask] = destinationTasks.splice(source.index, 1);
     } else {
       // Moving tasks between columns
-      const sourceColumn = updatedColumns.find(col => col.id === source.droppableId);
-      const destinationColumn = updatedColumns.find(col => col.id === destination.droppableId);
+      const sourceColumn = updatedColumns.find(col => col.id === source.droppableId).tasks;
+      destinationTasks = updatedColumns.find(col => col.id === destination.droppableId).tasks;
 
-      const sourceTasks = sourceColumn.tasks;
-      [movedTask] = sourceTasks.splice(source.index, 1);
-      destinationTasks = destinationColumn.tasks;
-
-      // Update column_id for the moved task
+      [movedTask] = sourceColumn.splice(source.index, 1);
       movedTask.column_id = destination.droppableId;
     }
     // Set movedTask's new position based on its new neighbors
@@ -42,7 +36,7 @@ export default function WorkArea({ columns }) {
 
     // Optimistic update
     $workspace.setKey('columns', updatedColumns);
-    moveTask(movedTask.id, { destination: destination.droppableId, position: movedTask.position });
+    moveTask(movedTask.id, { column_id: destination.droppableId, position: movedTask.position });
   };
 
   return (

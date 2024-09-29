@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 
-import { Input } from '@form/Fields';
 import Form from '@form/Form';
+import { Input } from '@form/Fields';
 import { MIN_LENGTH, REQUIRED } from '@form/validations';
 
 import useFetch from '@tools/useFetch';
