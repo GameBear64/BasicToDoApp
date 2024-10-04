@@ -1,13 +1,13 @@
+const generateUUID = require('../extends/UUID.js');
+
 /**
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> }
  */
 exports.up = function (knex) {
-  let uuidGenerationRaw = `(lower(hex(randomblob(4))) || '-' || lower(hex(randomblob(2))) || '-4' || substr(lower(hex(randomblob(2))),2) || '-' || substr('89ab',abs(random()) % 4 + 1, 1) || substr(lower(hex(randomblob(2))),2) || '-' || lower(hex(randomblob(6))))`;
-
   return knex.schema
     .createTable('users', table => {
-      table.uuid('id').defaultTo(knex.raw(uuidGenerationRaw));
+      table.uuid('id').defaultTo(generateUUID(knex));
       // == required ==
       table.string('name').notNullable();
       table.string('email').unique().notNullable();

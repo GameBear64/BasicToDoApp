@@ -6,6 +6,21 @@ exports.createWorkspaceWithUser = async (db, columns) => {
       .insert(omit(columns, ['views']))
       .returning('id');
 
+    // Default labels
+    const a = await trx('task_types').insert([
+      { workspace_id: workspace.id, title: 'Bug', color: 'red', icon: 'bug_report' },
+      { workspace_id: workspace.id, title: 'Feature', color: 'blue', icon: 'trending_up' },
+      { workspace_id: workspace.id, title: 'Chore', color: 'yellow', icon: 'construction' },
+      { workspace_id: workspace.id, title: 'Story', color: 'violet', icon: 'book' },
+    ]);
+
+    // Default fields
+    await trx('custom_fields').insert([
+      { workspace_id: workspace.id, title: 'PR Link' },
+      { workspace_id: workspace.id, title: 'Story points' },
+      { workspace_id: workspace.id, title: 'Hours worked' },
+    ]);
+
     // Add the user as the first member of the workspace
     await trx('workspace_members').insert({
       workspace_id: workspace.id,

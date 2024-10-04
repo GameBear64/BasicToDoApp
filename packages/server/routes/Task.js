@@ -16,8 +16,25 @@ router
     async (req, res) => {
       const { count } = await db('tasks').where('column_id', req.body.column_id).count('id as count').first();
 
+      const [{ max_serial }] = await db('workspaces')
+        .where('id', function () {
+          this.select('workspaces.id')
+            .from('columns')
+            .where('columns.id', req.body.column_id)
+            .join('views', 'columns.view_id', 'views.id')
+            .join('workspaces', 'views.workspace_id', 'workspaces.id')
+            .first();
+        })
+        .increment('max_serial', 1)
+        .returning('max_serial');
+
       const [result] = await db('tasks')
-        .insert({ ...req.body, position: count + 1, author: req.authUser.id })
+        .insert({
+          ...req.body,
+          position: count + 1,
+          serial: max_serial + 1,
+          author: req.authUser.id,
+        })
         .returning('*');
 
       res.status(201).json(result);
@@ -30,7 +47,7 @@ router
 router
   .route('/:id')
   .get(async (req, res) => {
-    const result = await db('tasks').where('id', req.params.id);
+    const result = await db('tasks').where('id', req.params.id).populate(db('labels'), 'labels', 'id');
 
     res.status(200).json(result);
   })
@@ -39,6 +56,7 @@ router
       title: joi.string().min(3).max(255).optional(),
       description: joi.string().min(3).optional().allow(null, ''),
       column_id: joi.string().uuid().optional(),
+      type: joi.string().uuid().optional().allow(null),
     }),
     async (req, res) => {
       const [result] = await db('tasks').where('id', req.params.id).update(req.body).returning('*');
